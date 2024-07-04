@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import AuthContext from '../context/AuthContext';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useContext(AuthContext);
 
-  const handleLogin = () => {
-    axios.post('/api/login', { username, password })
-      .then(response => {
-        localStorage.setItem('token', response.data.token);
-        window.location.href = '/';
-      })
-      .catch(error => {
-        console.error("There was an error logging in!", error);
-      });
+  const handleLogin = async () => {
+    try {
+      await login(username, password);
+    } catch (error) {
+      console.error('Failed to log in', error);
+    }
   };
+
 
   return (
     <div>
